@@ -1,2 +1,2 @@
-# xnote-stopwatch-snap
-Unofficial snap packaging for XNote Stopwatch
+# Unofficial Snap Packaging for XNote Stopwatch
+T.B.A.
