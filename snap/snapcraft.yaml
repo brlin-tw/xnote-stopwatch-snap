@@ -7,47 +7,163 @@ description: |
   XNote Stopwatch is a versatile and flexible multifunctional digital stopwatch
   / countdown timer / clock software for PC. Helpful for timekeepers at sport
   competitions, time tracking of work, or even as a metronome.
-  
-  The key features are:
 
-  - Digital display like handheld stopwatches and clocks. But unlike those
-    XNote Stopwatch can be resized to achieve any dimensions of digits: from
-    fullscreen on a LCD TV (jumbotron) for public presentations like a 
-    'stopclock', to tiny icon on your desktop as a reminder. Along with size,
-    you can adjust colors, font, transparency, etc…
-  - Stopwatch mode and countdown timer mode: When the timer gets to zero, it
-    can sound a warning signal, play an audio file, run an application, and
-    even command external devices!
-  - Customization of displayed time: You can eliminate hours, minutes, and/or
-    decimals, pad leading values with zeroes, customize decimals to represent
-    10, 100 or 1000 of second, 24, 25, 60 TV frames and so on. These changes 
-    are lossless and can be carried out at any moment.
-  - Ability to capture the time at any moment (split time feature). The
-    interval from a previous recorded time is calculated (lap time feature).
-    You may add a comment to each noted time. Finally, the whole list of
-    results can be copied through the clipboard for further processing.
-  - Ability to set a custom time. This means that you can rewind the
-    stopwatch backward or forward. All displaced results will be deleted.
-  - Multiple stopwatches and timers with their own settings and run 
-    independently of each other.
-  - External control through serial COM (RS-232) port: You can start, 
-    stop, reset the stopwatch, and snap the time with a simple on/off 
-    switch, photocell, and even an RFID-tag reader for accurate timekeeping!
-  - Changing colors and playing warning signals when Timer is almost done.
+#   The key features are:
 
-  Despite the variety of features, XNote Stopwatch has a small memory size, 
-  low system resource requirements, and fast execution speed!
+#   - Digital display like handheld stopwatches and clocks. But unlike those
+#     XNote Stopwatch can be resized to achieve any dimensions of digits: from
+#     fullscreen on a LCD TV (jumbotron) for public presentations like a
+#     'stopclock', to tiny icon on your desktop as a reminder. Along with size,
+#     you can adjust colors, font, transparency, etc…
+#   - Stopwatch mode and countdown timer mode: When the timer gets to zero, it
+#     can sound a warning signal, play an audio file, run an application, and
+#     even command external devices!
+#   - Customization of displayed time: You can eliminate hours, minutes, and/or
+#     decimals, pad leading values with zeroes, customize decimals to represent
+#     10, 100 or 1000 of second, 24, 25, 60 TV frames and so on. These changes
+#     are lossless and can be carried out at any moment.
+#   - Ability to capture the time at any moment (split time feature). The
+#     interval from a previous recorded time is calculated (lap time feature).
+#     You may add a comment to each noted time. Finally, the whole list of
+#     results can be copied through the clipboard for further processing.
+#   - Ability to set a custom time. This means that you can rewind the
+#     stopwatch backward or forward. All displaced results will be deleted.
+#   - Multiple stopwatches and timers with their own settings and run
+#     independently of each other.
+#   - External control through serial COM (RS-232) port: You can start,
+#     stop, reset the stopwatch, and snap the time with a simple on/off
+#     switch, photocell, and even an RFID-tag reader for accurate timekeeping!
+#   - Changing colors and playing warning signals when Timer is almost done.
 
-  **Snap-specific notes**
+#   Despite the variety of features, XNote Stopwatch has a small memory size,
+#   low system resource requirements, and fast execution speed!
 
-  * Due to the difference between the WINE compatibility layer and the native
-    Windows runtime, some aforementioned feature may not be available
-  * Due to the Confinement nature of snaps, some features may not be availble
-    or be limited
-  * This is NOT an official distribution of XNote Stopwatch, please report
-    any problems to the snap's own issue tracker, thank you
-  * Upstream: <http://www.xnotestopwatch.com/>
-  * Packaging source: <https://github.com/Lin-Buo-Ren/xnote-stopwatch-snap>
+#   **Snap-specific notes**
+
+#   * Due to the difference between the WINE compatibility layer and the native
+#     Windows runtime, some aforementioned feature may not be available
+#   * Due to the Confinement nature of snaps, some features may not be availble
+#     or be limited
+#   * This is NOT an official distribution of XNote Stopwatch, please report
+#     any problems to the snap's own issue tracker, thank you
+#   * Upstream: <http://www.xnotestopwatch.com/>
+#   * Packaging source: <https://github.com/Lin-Buo-Ren/xnote-stopwatch-snap>
 
 grade: stable
 confinement: strict
+architectures:
+  - build-on: amd64
+  - build-on: i386
+
+parts:
+  main:
+    # See 'snapcraft plugins'
+    plugin: nil
+
+  # The sommelier script helps you snap Windows applications using Wine. It
+  # initializes and configures Wine and installs the Windows application.
+  sommelier:
+    plugin: make
+    source: https://github.com/snapcrafters/sommelier-core.git
+    source-branch: '1.0'
+    stage-packages:
+      - xdg-user-dirs
+
+  launchers:
+    plugin: dump
+    source: snap/local/launchers
+    organize:
+      '*-launch': bin/
+    stage-packages:
+      - curl
+
+  # Stage snap for fixing the Glibc locales
+  # https://forum.snapcraft.io/t/the-locales-launch-stage-snap/10296
+  locales-launch:
+    source: https://github.com/Lin-Buo-Ren/locales-launch.git
+    source-tag: v1.0.0
+    plugin: dump
+    stage-packages:
+    # For localedef(1)
+    - libc-bin
+
+    # For locale data used by localedef(1)
+    - locales
+
+    stage:
+      - bin/locales-launch
+      - etc/locale.alias
+      - usr/bin/localedef
+      - usr/share/doc/locales
+      - usr/share/i18n
+      - usr/share/locale
+apps:
+  xnote-stopwatch:
+    extensions:
+      - gnome-3-28
+    adapter: full
+    command: bin/sommelier run-exe
+    command-chain:
+      - bin/locales-launch
+      - bin/xnote-stopwatch-launch
+    environment:
+      WINEDLLOVERRIDES: "$WINEDLLOVERRIDES;mscoree,mshtml="    # Prevent pop-ups about Wine Mono and Wine Gecko
+      SOMMELIER_STRICT: "1"                                    # Make Sommelier exit when unset variable is used. (useful to find bugs in sommelier)
+      RUN_EXE: '${SNAP_USER_COMMON}/xnsw.exe'
+
+  # The wine command can be used to run applications inside the wine
+  # environment that this snap uses.
+  #
+  # For example, users can configure the wine environment of this snap
+  # by running `myapp.wine winecfg`.
+  wine:
+    extensions:
+      - gnome-3-28
+    command: bin/sommelier
+    command-chain:
+      - bin/locales-launch
+
+  # The winetricks command can be used to run winetricks inside the wine
+  # environment that this snap uses.
+  winetricks:
+    extensions:
+      - gnome-3-28
+    adapter: full
+    command: bin/sommelier winetricks
+    command-chain:
+      - bin/locales-launch
+
+plugs:
+  # Regular file access
+  home:
+  removable-media:
+
+  # For download the application
+  network:
+
+  # For wineserver functionality
+  network-bind:
+
+  # Graphical resources access
+  desktop:
+  desktop-legacy:
+  x11:
+  unity7:
+  wayland:
+
+  # Playing notification sound
+  audio-playback:
+
+  # WINE runtime
+  wine-runtime:
+    interface: content
+    target: $SNAP/wine-runtime
+    default-provider: wine-platform-runtime
+  wine-5-stable:
+    interface: content
+    target: $SNAP/wine-platform
+    default-provider: wine-platform-5-stable
+
+  # Control via serial port
+  serial-port:
+    path: /dev/ttyS1
