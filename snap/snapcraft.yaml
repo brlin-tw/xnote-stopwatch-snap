@@ -46,8 +46,8 @@ description: |
     or be limited
   * This is NOT an official distribution of XNote Stopwatch, please report
     any problems to the snap's own issue tracker, thank you
-  * Upstream: <http://www.xnotestopwatch.com/>
-  * Packaging source: <https://github.com/Lin-Buo-Ren/xnote-stopwatch-snap>
+  * Upstream: http://www.xnotestopwatch.com/
+  * Packaging source: https://github.com/Lin-Buo-Ren/xnote-stopwatch-snap
 
 grade: stable
 confinement: strict
