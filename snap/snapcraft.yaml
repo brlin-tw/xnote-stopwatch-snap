@@ -40,8 +40,8 @@ description: |
 
   **Snap-specific notes**
 
-  * Due to the difference between the WINE compatibility layer and the native
-    Windows runtime, some aforementioned feature may not be available
+  * Due to differences between the WINE compatibility layer and the native
+    Windows runtime, some aforementioned features may not be available
   * Due to the confined nature of snaps, some features may not be available
     or be limited
   * This is NOT an official distribution of XNote Stopwatch, please report
