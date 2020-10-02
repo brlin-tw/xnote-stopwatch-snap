@@ -42,7 +42,7 @@ description: |
 
   * Due to the difference between the WINE compatibility layer and the native
     Windows runtime, some aforementioned feature may not be available
-  * Due to the Confinement nature of snaps, some features may not be availble
+  * Due to the confined nature of snaps, some features may not be available
     or be limited
   * This is NOT an official distribution of XNote Stopwatch, please report
     any problems to the snap's own issue tracker, thank you
