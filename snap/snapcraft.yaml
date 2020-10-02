@@ -165,5 +165,6 @@ plugs:
     default-provider: wine-platform-5-stable
 
   # Control via serial port
-  serial-port:
-    path: /dev/ttyS1
+  # Disabled: Not available to classic system snaps
+  # serial-port:
+  #   path: /dev/ttyS1
