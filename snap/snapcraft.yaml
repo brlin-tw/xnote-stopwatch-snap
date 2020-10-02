@@ -49,6 +49,7 @@ description: |
   * Upstream: http://www.xnotestopwatch.com/
   * Packaging source: https://github.com/Lin-Buo-Ren/xnote-stopwatch-snap
 
+icon: snap/gui/logo.gif.64px.png
 grade: stable
 confinement: strict
 architectures:

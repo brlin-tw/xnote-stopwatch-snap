@@ -1,0 +1,12 @@
+# Demonstration desktop entry file for Snapcrafters Template Plus
+# Refer the Desktop Entry Specification on how to write this file:
+# https://specifications.freedesktop.org/desktop-entry-spec
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=XNote Stopwatch (UNOFFICIAL)
+Comment=A multifunctional digital stopwatch/countdown timer/clock software
+Comment[zh_TW]=一個多功能的數位計時器/倒數器/時鐘軟體
+Exec=xnote-stopwatch
+Icon=${SNAP}/meta/gui/logo.gif.64px.png
+Categories=Utility
