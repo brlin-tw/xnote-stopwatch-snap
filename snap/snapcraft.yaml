@@ -56,10 +56,6 @@ architectures:
   - build-on: i386
 
 parts:
-  main:
-    # See 'snapcraft plugins'
-    plugin: nil
-
   # The sommelier script helps you snap Windows applications using Wine. It
   # initializes and configures Wine and installs the Windows application.
   sommelier:
