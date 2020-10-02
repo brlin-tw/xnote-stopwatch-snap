@@ -55,6 +55,7 @@ confinement: strict
 architectures:
   - build-on: amd64
   - build-on: i386
+license: Proprietary
 
 parts:
   # The sommelier script helps you snap Windows applications using Wine. It
