@@ -159,8 +159,3 @@ plugs:
     interface: content
     target: $SNAP/wine-platform
     default-provider: wine-platform-5-stable
-
-  # Control via serial port
-  # Disabled: Not available to classic system snaps
-  # serial-port:
-  #   path: /dev/ttyS1
