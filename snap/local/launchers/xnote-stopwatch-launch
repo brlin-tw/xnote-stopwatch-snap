@@ -2,6 +2,42 @@
 # Snap maintainence launcher
 set -eu
 
+maintainer_notice_read_marker_file="${SNAP_USER_COMMON}/skip-maintainer-notice.marker"
+if ! test -e "${maintainer_notice_read_marker_file}"; then
+msg_text="$(cat <<EOF
+Hello, this is 林博仁(Buo-ren Lin), the maintainer of the XNote Stopwatch snap.
+
+I would like to inform you that this is NOT an official distribution of the XNote Stopwatch application, please report all issues regarding the usage of this snap to the snap's own issue tracker:
+
+    Issues · brlin-tw/xnote-stopwatch-snap
+    https://github.com/brlin-tw/xnote-stopwatch-snap/issues
+
+Thank you.
+
+This dialog will only display once, to see it again remove the <tt>${maintainer_notice_read_marker_file}</tt> marker file and relaunch the application.
+EOF
+)"
+    zenity_opts=(
+        --title='Notice from the snap maintainer'
+        --width=640
+        --info
+        --ok-label='Continue'
+        --text="${msg_text}"
+    )
+    if ! zenity "${zenity_opts[@]}"; then
+        printf \
+            'Error: Unable to present the snap maintainer notice.\n.' \
+            1>&2
+        exit 2
+    fi
+    if ! touch "${maintainer_notice_read_marker_file}"; then
+        printf \
+            'Error: Unable to create the maintainer notice read marker file.\n' \
+            1>&2
+        exit 2
+    fi
+fi
+
 if ! test -e "${SNAP_USER_COMMON}/xnsw.exe"; then
     printf -- \
         'Application executable not found, downloading from the official website...\n'
