@@ -7,14 +7,18 @@ if ! test -e "${maintainer_notice_read_marker_file}"; then
 msg_text="$(cat <<EOF
 Hello, this is 林博仁(Buo-ren Lin), the maintainer of the XNote Stopwatch snap.
 
-I would like to inform you that this is NOT an official distribution of the XNote Stopwatch application, please report all issues regarding the usage of this snap to the snap's own issue tracker:
+I would like to inform you that this is NOT an official distribution of the
+XNote Stopwatch application, please report all issues regarding the usage of
+this snap to the snap's own issue tracker:
 
     Issues · brlin-tw/xnote-stopwatch-snap
     https://github.com/brlin-tw/xnote-stopwatch-snap/issues
 
 Thank you.
 
-This dialog will only display once, to see it again remove the <tt>${maintainer_notice_read_marker_file}</tt> marker file and relaunch the application.
+This dialog will only display once, to see it again remove the
+<tt>${maintainer_notice_read_marker_file}</tt>
+marker file and relaunch the application.
 EOF
 )"
     zenity_opts=(
@@ -41,17 +45,26 @@ fi
 security_confinement_warning_marker_file="${SNAP_USER_COMMON}/skip-security-confinement-warning.marker"
 if ! test -e "${security_confinement_warning_marker_file}"; then
 msg_text="$(cat <<EOF
-Due to the licensing restriction, this application is not bundled in the snap and will be downloaded from the official website in runtime.
+Due to the licensing restriction, this application is not bundled in the snap
+and will be downloaded from the official website in runtime.
 
-There is a potential risk that the downloaded software may be replaced by a malware if an evil actor has hijacked the website.  As an attempt to mitigate this risk the snap is by default not connected to the <tt>home</tt> snapd security confinement interface, which allows the application to access your files in your home directory.
+There is a potential risk that the downloaded software may be replaced by a
+malware if an evil actor has hijacked the website.  As an attempt to mitigate
+this risk the snap is by default not connected to the <tt>home</tt> snapd
+security confinement interface, which allows the application to access your
+files in your home directory.
 
-If you have specific needs that require the snap to connect to the <tt>home</tt> interface(e.g. Play custom audio alarm file), you may do so by running the following command in a text terminal:
+If you have specific needs that require the snap to connect to the <tt>home</tt>
+interface(e.g. Play custom audio alarm file), you may do so by running the
+following command in a text terminal:
 
     sudo snap connect ${SNAP_NAME}:home
 
 Thank you.
 
-This dialog will only display once, to see it again remove the <tt>${security_confinement_warning_marker_file}</tt> marker file and relaunch the application.
+This dialog will only display once, to see it again remove the
+<tt>${security_confinement_warning_marker_file}</tt>
+marker file and relaunch the application.
 EOF
 )"
     zenity_opts=(
