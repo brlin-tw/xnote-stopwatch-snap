@@ -18,7 +18,7 @@ if ! test -e "${SNAP_USER_COMMON}/xnsw.exe"; then
         printf -- \
             'Error: Program download failed.\n' \
             1>&2
-        #exit 1
+        exit 1
     fi
     cd - >/dev/null
 fi
