@@ -47,7 +47,7 @@ description: |
   * This is NOT an official distribution of XNote Stopwatch, please report
     any problems to the snap's own issue tracker, thank you
   * Upstream: http://www.xnotestopwatch.com/
-  * Packaging source: https://github.com/Lin-Buo-Ren/xnote-stopwatch-snap
+  * Packaging source: https://github.com/brlin-tw/xnote-stopwatch-snap
 
 icon: snap/gui/logo.gif.64px.png
 grade: stable
