@@ -45,7 +45,7 @@ fi
 security_confinement_warning_marker_file="${SNAP_USER_COMMON}/skip-security-confinement-warning.marker"
 if ! test -e "${security_confinement_warning_marker_file}"; then
 msg_text="$(cat <<EOF
-Due to the licensing restriction, this application is not bundled in the snap
+Due to the licensing restrictions, this application is not bundled in the snap
 and will be downloaded from the official website in runtime.
 
 There is a potential risk that the downloaded software may be replaced by a
@@ -55,7 +55,7 @@ security confinement interface, which allows the application to access your
 files in your home directory.
 
 If you have specific needs that require the snap to connect to the <tt>home</tt>
-interface(e.g. Play custom audio alarm file), you may do so by running the
+interface(e.g. play custom audio alarm file), you may do so by running the
 following command in a text terminal:
 
     sudo snap connect ${SNAP_NAME}:home
