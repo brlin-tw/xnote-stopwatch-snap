@@ -92,10 +92,19 @@ if ! test -e "${SNAP_USER_COMMON}/xnsw.exe"; then
             curl "${curl_opts[@]}" \
                 http://www.xnotestopwatch.com/xnsw.exe
         )" != 200; then
-        printf -- \
-            'Error: Unable to download the application executable from the official website.\n' \
-            1>&2
-        exit 1
+        zenity_opts=(
+            --title='Launcher error'
+            --width=640
+            --error
+            --text='Unable to download the application executable from the official website.'
+        )
+        if ! zenity "${zenity_opts[@]}"; then
+            printf \
+                'Error: Unable to present the zenity error dialog.\n.' \
+                1>&2
+            exit 2
+        fi
+        exit 2
     fi
     cd - >/dev/null
 fi
