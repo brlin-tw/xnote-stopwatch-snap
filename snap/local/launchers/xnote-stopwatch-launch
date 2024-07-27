@@ -23,4 +23,4 @@ if ! test -e "${SNAP_USER_COMMON}/xnsw.exe"; then
     cd - >/dev/null
 fi
 
-"${@}"
+exec "${@}"
