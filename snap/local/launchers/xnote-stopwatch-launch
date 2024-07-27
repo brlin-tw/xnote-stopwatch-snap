@@ -38,6 +38,44 @@ EOF
     fi
 fi
 
+security_confinement_warning_marker_file="${SNAP_USER_COMMON}/skip-security-confinement-warning.marker"
+if ! test -e "${security_confinement_warning_marker_file}"; then
+msg_text="$(cat <<EOF
+Due to the licensing restriction, this application is not bundled in the snap and will be downloaded from the official website in runtime.
+
+There is a potential risk that the downloaded software may be replaced by a malware if an evil actor has hijacked the website.  As an attempt to mitigate this risk the snap is by default not connected to the <tt>home</tt> snapd security confinement interface, which allows the application to access your files in your home directory.
+
+If you have specific needs that require the snap to connect to the <tt>home</tt> interface(e.g. Play custom audio alarm file), you may do so by running the following command in a text terminal:
+
+    sudo snap connect ${SNAP_NAME}:home
+
+Thank you.
+
+This dialog will only display once, to see it again remove the <tt>${security_confinement_warning_marker_file}</tt> marker file and relaunch the application.
+EOF
+)"
+    zenity_opts=(
+        --width=640
+        --title='Security confinement warning - The home interface'
+        --info
+        --ok-label='Continue'
+        --text="${msg_text}"
+    )
+    if ! zenity "${zenity_opts[@]}"; then
+        printf \
+            'Error: Unable to present the security confinement warning(home).\n.' \
+            1>&2
+        exit 2
+    fi
+
+    if ! touch "${security_confinement_warning_marker_file}"; then
+        printf \
+            'Error: Unable to create the security confinement warning read marker file.\n' \
+            1>&2
+        exit 2
+    fi
+fi
+
 if ! test -e "${SNAP_USER_COMMON}/xnsw.exe"; then
     printf -- \
         'Application executable not found, downloading from the official website...\n'
