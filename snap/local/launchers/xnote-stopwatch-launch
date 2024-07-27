@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 # Snap maintainence launcher
 set -x
-if ! test -e "${SNAP_USER_COMMON}"/xnsw.exe; then
+if ! test -e "${SNAP_USER_COMMON}/xnsw.exe"; then
     printf -- \
         'Application executable not found, downloading from official website...\n'
     cd "${SNAP_USER_COMMON}"
