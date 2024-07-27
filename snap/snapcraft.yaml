@@ -90,6 +90,26 @@ apps:
       WINEDLLOVERRIDES: "$WINEDLLOVERRIDES;mscoree,mshtml="    # Prevent pop-ups about Wine Mono and Wine Gecko
       SOMMELIER_STRICT: "1"                                    # Make Sommelier exit when unset variable is used. (useful to find bugs in sommelier)
       RUN_EXE: '${SNAP_USER_COMMON}/xnsw.exe'
+    plugs:
+      # Regular file access
+      - home
+      - removable-media
+
+      # For download the application
+      - network
+
+      # For wineserver functionality
+      - network-bind
+
+      # Graphical resources access
+      - desktop
+      - desktop-legacy
+      - x11
+      - unity7
+      - wayland
+
+      # Playing notification sound
+      - audio-playback
 
   # The wine command can be used to run applications inside the wine
   # environment that this snap uses.
@@ -100,6 +120,19 @@ apps:
     extensions:
       - gnome
     command: bin/sommelier
+    plugs:
+      # Graphical resources access
+      - desktop
+      - desktop-legacy
+      - x11
+      - unity7
+      - wayland
+
+      # For debugging
+      - network
+
+      # For wineserver functionality
+      - network-bind
 
   # The winetricks command can be used to run winetricks inside the wine
   # environment that this snap uses.
@@ -107,28 +140,21 @@ apps:
     extensions:
       - gnome
     command: bin/sommelier winetricks
+    plugs:
+      # Graphical resources access
+      - desktop
+      - desktop-legacy
+      - x11
+      - unity7
+      - wayland
+
+      # For winetricks functionality
+      - network
+
+      # For wineserver functionality
+      - network-bind
 
 plugs:
-  # Regular file access
-  home:
-  removable-media:
-
-  # For download the application
-  network:
-
-  # For wineserver functionality
-  network-bind:
-
-  # Graphical resources access
-  desktop:
-  desktop-legacy:
-  x11:
-  unity7:
-  wayland:
-
-  # Playing notification sound
-  audio-playback:
-
   # WINE runtime
   wine-runtime-c22:
     interface: content
