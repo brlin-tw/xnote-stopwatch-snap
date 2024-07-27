@@ -1,5 +1,5 @@
 name: xnote-stopwatch
-base: core18
+base: core22
 version: '1.68'
 title: XNote Stopwatch (UNOFFICIAL)
 summary: A multifunctional digital stopwatch/countdown timer/clock software
@@ -54,7 +54,6 @@ grade: stable
 confinement: strict
 architectures:
   - build-on: amd64
-  - build-on: i386
 license: Proprietary
 
 parts:
@@ -63,7 +62,12 @@ parts:
   sommelier:
     plugin: make
     source: https://github.com/snapcrafters/sommelier-core.git
-    source-branch: '1.0'
+    # WORKAROUND: The 1.0 branch isn't buildable on core22
+    # https://github.com/snapcrafters/sommelier-core/issues/48
+    source-branch: master
+    build-packages:
+      - libc6-dev-i386
+      - gcc-multilib
     stage-packages:
       - xdg-user-dirs
 
@@ -75,34 +79,12 @@ parts:
     stage-packages:
       - curl
 
-  # Stage snap for fixing the Glibc locales
-  # https://forum.snapcraft.io/t/the-locales-launch-stage-snap/10296
-  locales-launch:
-    source: https://github.com/Lin-Buo-Ren/locales-launch.git
-    source-tag: v1.0.0
-    plugin: dump
-    stage-packages:
-    # For localedef(1)
-    - libc-bin
-
-    # For locale data used by localedef(1)
-    - locales
-
-    stage:
-      - bin/locales-launch
-      - etc/locale.alias
-      - usr/bin/localedef
-      - usr/share/doc/locales
-      - usr/share/i18n
-      - usr/share/locale
 apps:
   xnote-stopwatch:
     extensions:
-      - gnome-3-28
-    adapter: full
+      - gnome
     command: bin/sommelier run-exe
     command-chain:
-      - bin/locales-launch
       - bin/xnote-stopwatch-launch
     environment:
       WINEDLLOVERRIDES: "$WINEDLLOVERRIDES;mscoree,mshtml="    # Prevent pop-ups about Wine Mono and Wine Gecko
@@ -116,20 +98,15 @@ apps:
   # by running `myapp.wine winecfg`.
   wine:
     extensions:
-      - gnome-3-28
+      - gnome
     command: bin/sommelier
-    command-chain:
-      - bin/locales-launch
 
   # The winetricks command can be used to run winetricks inside the wine
   # environment that this snap uses.
   winetricks:
     extensions:
-      - gnome-3-28
-    adapter: full
+      - gnome
     command: bin/sommelier winetricks
-    command-chain:
-      - bin/locales-launch
 
 plugs:
   # Regular file access
@@ -153,11 +130,11 @@ plugs:
   audio-playback:
 
   # WINE runtime
-  wine-runtime:
+  wine-runtime-c22:
     interface: content
     target: $SNAP/wine-runtime
-    default-provider: wine-platform-runtime
-  wine-5-stable:
+    default-provider: wine-platform-runtime-core22
+  wine-9-stable:
     interface: content
     target: $SNAP/wine-platform
-    default-provider: wine-platform-5-stable
+    default-provider: wine-platform-9-stable-core22
