@@ -4,7 +4,7 @@
 
 if ! test -e "${SNAP_USER_COMMON}/xnsw.exe"; then
     printf -- \
-        'Application executable not found, downloading from official website...\n'
+        'Application executable not found, downloading from the official website...\n'
     cd "${SNAP_USER_COMMON}"
     if test "$(
             curl \
