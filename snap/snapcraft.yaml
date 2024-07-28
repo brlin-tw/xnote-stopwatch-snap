@@ -171,11 +171,6 @@ apps:
       - network-bind
 
 plugs:
-  # Intentionally make the home interface connection non-autoconnected to
-  # mitigate risk of external malware
-  home:
-    read: all
-
   # WINE runtime
   wine-runtime-c22:
     interface: content
