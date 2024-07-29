@@ -86,8 +86,16 @@ EOF
 fi
 
 if ! test -e "${SNAP_USER_COMMON}/xnsw.exe"; then
-    printf -- \
-        'Application executable not found, downloading from the official website...\n'
+    zenity_opts=(
+        --progress
+        --title='Downloading the application executable'
+        --text='Application executable not found, downloading from the official website...'
+        --pulsate
+        --no-cancel
+    )
+    sleep infinity \
+        | zenity "${zenity_opts[@]}" &
+    pulsate_zenity_pid="${!}"
     cd "${SNAP_USER_COMMON}"
     curl_opts=(
         --location
@@ -101,6 +109,12 @@ if ! test -e "${SNAP_USER_COMMON}/xnsw.exe"; then
             curl "${curl_opts[@]}" \
                 http://www.xnotestopwatch.com/xnsw.exe
         )" != 200; then
+        if ! kill "${pulsate_zenity_pid}"; then
+            printf \
+                'Error: Unable to kill the application download progress Zenity dialog.\n' \
+                1>&2
+            exit 2
+        fi
         zenity_opts=(
             --title='Launcher error'
             --width=640
@@ -113,6 +127,12 @@ if ! test -e "${SNAP_USER_COMMON}/xnsw.exe"; then
                 1>&2
             exit 2
         fi
+        exit 2
+    fi
+    if ! kill "${pulsate_zenity_pid}"; then
+        printf \
+            'Error: Unable to kill the application download progress Zenity dialog.\n' \
+            1>&2
         exit 2
     fi
     cd - >/dev/null
