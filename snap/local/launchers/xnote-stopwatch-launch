@@ -43,18 +43,22 @@ EOF
 fi
 
 security_confinement_warning_marker_file="${SNAP_USER_COMMON}/skip-security-confinement-warning.marker"
-if ! test -e "${security_confinement_warning_marker_file}"; then
+if ! test -e "${security_confinement_warning_marker_file}" \
+    && ! snapctl is-connected home; then
 msg_text="$(cat <<EOF
 Due to the licensing restrictions, this application is not bundled in the snap
 and will be downloaded from the official website in runtime.
 
 There is a potential risk that the downloaded software may be replaced by a
-malware if an evil actor has hijacked the website.  If you don't have specific
-needs(e.g. play custom alarm audio) that requires allowing the application to
-access the documents in your home directory you may disconnect the <tt>home</tt>
-interface connection by running the following command in a text terminal:
+malware if an evil actor has hijacked the website.  To mitigate this risk,
+the snap is by-default not connected to the <tt>home</tt> snapd security
+confinement interface which will deny the application's access to the files
+under your home directory.  If you have specific needs(e.g. play custom alarm
+audio) that requires allowing the application to access your files you may
+connect the snap to the <tt>home</tt> snapd security confinement interface
+by running the following command in a text terminal:
 
-    sudo snap disconnect ${SNAP_NAME}:home
+    sudo snap connect ${SNAP_NAME}:home
 
 Thank you.
 
